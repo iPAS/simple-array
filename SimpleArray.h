@@ -30,10 +30,12 @@ class SimpleArray {
     SZ size(void);
 
     T operator [] (SZ index);
+    void operator = (SZ index);
+    void operator = (SimpleArray<T, SZ> & array);
 
-    int  compare(SimpleArray<T, SZ> & arr);
-    bool operator == (SimpleArray<T, SZ> & arr);
-    bool operator != (SimpleArray<T, SZ> & arr);
+    int  compare(SimpleArray<T, SZ> & array);
+    bool operator == (SimpleArray<T, SZ> & array);
+    bool operator != (SimpleArray<T, SZ> & array);
 
     SZ append(T item);
     SZ append(SimpleArray<T, SZ> & array);

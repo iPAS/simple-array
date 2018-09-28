@@ -44,26 +44,26 @@ T SimpleArray<T, SZ>::operator [](SZ index) {
  * Comparators
  */
 template <class T, class SZ>
-int SimpleArray<T, SZ>::compare(SimpleArray<T, SZ> & arr) {
+int SimpleArray<T, SZ>::compare(SimpleArray<T, SZ> & array) {
     SZ i;
-    for (i = 0; i < bufferLength && i < arr.length(); i++) {
-        if (buffer[i] != arr[i])
+    for (i = 0; i < bufferLength && i < array.length(); i++) {
+        if (buffer[i] != array[i])
             break;
     }
-    if (bufferLength >= arr.length())
+    if (bufferLength >= array.length())
         return bufferLength - i;  // How many items left, NOT be compared nor equal
     else
-        return arr.length() - i;
+        return array.length() - i;
 }
 
 template <class T, class SZ>
-bool SimpleArray<T, SZ>::operator ==(SimpleArray<T, SZ> & arr) {
-    return ((bufferLength == arr.length()) && (compare(arr) == 0));
+bool SimpleArray<T, SZ>::operator ==(SimpleArray<T, SZ> & array) {
+    return ((bufferLength == array.length()) && (compare(array) == 0));
 }
 
 template <class T, class SZ>
-bool SimpleArray<T, SZ>::operator !=(SimpleArray<T, SZ> & arr) {
-    return !(*this == arr);
+bool SimpleArray<T, SZ>::operator !=(SimpleArray<T, SZ> & array) {
+    return !(*this == array);
 }
 
 /**
