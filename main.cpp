@@ -54,7 +54,7 @@ int main(int argc, char * argv[]) {
 
     // ------------------------------------------------------------------------
     char buf[4];
-    printf("readToBuffer %d of arr2: ", arr2.readToBuffer(buf, 4));
+    printf("readToBuffer %d of arr2: ", arr2.getBytes(buf, 4));
     for (i = 0; i < 4; i++)
         printf("%d ", buf[i]);
     showArray(" from arr2, left:", arr2);

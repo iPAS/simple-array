@@ -46,13 +46,12 @@ T * SimpleArray<T, SZ>::getBuffer(void) {
 }
 
 template <class T, class SZ>
-SZ SimpleArray<T, SZ>::readToBuffer(void * buf, SZ size) {
+SZ SimpleArray<T, SZ>::getBytes(void * buf, SZ size) {
     SZ i;
     for (i = 0; i < bufferLength && i < size; i++) {
         ((T *)buf)[i] = buffer[i];
     }
-    remove(0, i);
-    return i;
+    return i;  // actual read bytes
 }
 
 /**

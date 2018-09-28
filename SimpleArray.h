@@ -32,7 +32,7 @@ class SimpleArray {
     T & operator [] (SZ index);
     T * getBuffer(void);
 
-    SZ readToBuffer(void * buf, SZ size);
+    SZ getBytes(void * buf, SZ size);
 
     int  compare(SimpleArray<T, SZ> & array);
     bool operator == (SimpleArray<T, SZ> & array);
