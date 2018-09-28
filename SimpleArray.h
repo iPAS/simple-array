@@ -29,7 +29,7 @@ class SimpleArray {
     SZ length(void);
     SZ size(void);
 
-    T operator [] (SZ index);
+    T & operator [] (SZ index);
     void operator = (SZ index);
     void operator = (SimpleArray<T, SZ> & array);
 

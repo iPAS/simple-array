@@ -36,7 +36,7 @@ SZ SimpleArray<T, SZ>::size() {
 }
 
 template <class T, class SZ>
-T SimpleArray<T, SZ>::operator [](SZ index) {
+T & SimpleArray<T, SZ>::operator [](SZ index) {
     return buffer[index];
 }
 

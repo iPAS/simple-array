@@ -9,33 +9,52 @@ using namespace std;
 #define TEST_SIZE 20
 #define TEST_COUNT 1000
 
+typedef SimpleArray<uint8_t, int> array_t;
+
+void showArray(const char * pre_msg, array_t & array) {
+    printf("%s", pre_msg);
+    for (int i = 0; i < array.length(); i++)
+        printf("%d ", array[i]);
+    printf("\n");
+}
+
 int main(int argc, char * argv[]) {
     printf("Test SimpleArray\n");
+    printf("----------------\n");
 
-    /**
+    /**************************************************************************
      * Test functions
      */
     int i;
 
-    SimpleArray<uint8_t, int> arr1(HEAP_SIZE);
+    array_t arr1(HEAP_SIZE);
+    array_t arr2(HEAP_SIZE);
     for (i = 0; i < TEST_SIZE; i++) {
         arr1 += i;
     }
-    SimpleArray<uint8_t, int> arr2(HEAP_SIZE);
     arr2 += arr1;
 
+    // ------------------------------------------------------------------------
     if (arr1 == arr2)
-        printf("arr1 equal arr2\n");
+        printf("Operator == , arr1 equal arr2\n");
 
-    printf("Remove arr2 from 2 to 2+%d = %d units\n", TEST_SIZE, arr2.remove(2, TEST_SIZE));
-    for (i = 0; i < arr2.length(); i ++)
-        printf("%d ", arr2[i]);
-    printf("\n");
+    printf("Remove arr2 from 2 to 2+%d = %d units:", TEST_SIZE, arr2.remove(2, TEST_SIZE));
+    showArray(" ", arr2);
 
     if (arr1 != arr2)
-        printf("arr1 not equal arr2\n");
+        printf("Operator != , arr1 not equal arr2\n");
 
-    /**
+    printf("\n");
+
+    // ------------------------------------------------------------------------
+    printf("Lvalue accessing of arr2:");
+    for (i = 0; i < arr2.length(); i++)
+        arr2[i] = i;
+    showArray(" ", arr2);
+
+    printf("\n");
+
+    /**************************************************************************
      * Test reliability
      */
     for (int t = 0; t < TEST_COUNT; t++) {
