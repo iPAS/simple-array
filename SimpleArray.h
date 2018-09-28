@@ -32,9 +32,6 @@ class SimpleArray {
     T & operator [] (SZ index);
     T * bufferPointer(void);
 
-    void operator = (SZ index);
-    void operator = (SimpleArray<T, SZ> & array);
-
     int  compare(SimpleArray<T, SZ> & array);
     bool operator == (SimpleArray<T, SZ> & array);
     bool operator != (SimpleArray<T, SZ> & array);
@@ -43,6 +40,8 @@ class SimpleArray {
     SZ append(SimpleArray<T, SZ> & array);
     void operator += (T item);
     void operator += (SimpleArray<T, SZ> & array);
+    void operator = (T item);
+    void operator = (SimpleArray<T, SZ> & array);
 
     SZ remove(SZ index, SZ count);
     void clear();
