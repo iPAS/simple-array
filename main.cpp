@@ -19,10 +19,10 @@ int main(int argc, char * argv[]) {
 
     SimpleArray<uint8_t, int> arr1(HEAP_SIZE);
     for (i = 0; i < TEST_SIZE; i++) {
-        arr1.append(i);
+        arr1 += i;
     }
     SimpleArray<uint8_t, int> arr2(HEAP_SIZE);
-    arr2.append(arr1);
+    arr2 += arr1;
 
     if (arr1 == arr2)
         printf("arr1 equal arr2\n");
@@ -43,9 +43,9 @@ int main(int argc, char * argv[]) {
         arr1.remove(1, 10);
         for (int j = tmp; j < tmp+10; j++) {
             if (j < TEST_SIZE)
-                arr1.append(j);
+                arr1 += j;
             else
-                arr1.append(j-TEST_SIZE + 1);
+                arr1 += j - TEST_SIZE + 1;
         }
 
         if (t % 100 == 0) {

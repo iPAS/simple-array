@@ -88,6 +88,16 @@ SZ SimpleArray<T, SZ>::append(SimpleArray<T, SZ> & array) {
 }
 
 template <class T, class SZ>
+void SimpleArray<T, SZ>::operator += (T item) {
+    append(item);
+}
+
+template <class T, class SZ>
+void SimpleArray<T, SZ>::operator += (SimpleArray<T, SZ> & array) {
+    append(array);
+}
+
+template <class T, class SZ>
 SZ SimpleArray<T, SZ>::remove(SZ index, SZ count) {
     if (index >= bufferLength)
         return 0;

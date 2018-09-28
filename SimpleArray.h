@@ -37,6 +37,9 @@ class SimpleArray {
 
     SZ append(T item);
     SZ append(SimpleArray<T, SZ> & array);
+    void operator += (T item);
+    void operator += (SimpleArray<T, SZ> & array);
+
     SZ remove(SZ index, SZ count);
     void clear();
 };
