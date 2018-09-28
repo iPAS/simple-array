@@ -43,6 +43,7 @@ class SimpleArray {
 
 // To solve 'undefined' problem
 // https://stackoverflow.com/questions/14914129/c-undefined-reference-to-template-class-method
+template class SimpleArray<uint8_t, uint8_t>;
 template class SimpleArray<uint8_t, int>;
 
 #endif  // __SIMPLE_ARRAY_H__
