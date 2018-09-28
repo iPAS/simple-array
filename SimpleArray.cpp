@@ -40,6 +40,11 @@ T & SimpleArray<T, SZ>::operator [](SZ index) {
     return buffer[index];
 }
 
+template <class T, class SZ>
+T * SimpleArray<T, SZ>::bufferPointer(void) {
+    return buffer;
+}
+
 /**
  * Comparators
  */

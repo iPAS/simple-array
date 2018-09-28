@@ -30,6 +30,8 @@ class SimpleArray {
     SZ size(void);
 
     T & operator [] (SZ index);
+    T * bufferPointer(void);
+
     void operator = (SZ index);
     void operator = (SimpleArray<T, SZ> & array);
 
