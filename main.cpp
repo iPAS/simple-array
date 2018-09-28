@@ -38,12 +38,11 @@ int main(int argc, char * argv[]) {
     if (arr1 == arr2)
         printf("Operator == , arr1 equal arr2\n");
 
-    printf("Remove arr2 from 2 to 2+%d = %d units:", TEST_SIZE, arr2.remove(2, TEST_SIZE));
+    printf("Remove arr2 from 2 to 2+%d = %d units:", TEST_SIZE, arr2.remove(8, TEST_SIZE));
     showArray(" ", arr2);
 
     if (arr1 != arr2)
         printf("Operator != , arr1 not equal arr2\n");
-
     printf("\n");
 
     // ------------------------------------------------------------------------
@@ -51,7 +50,14 @@ int main(int argc, char * argv[]) {
     for (i = 0; i < arr2.length(); i++)
         arr2[i] = i;
     showArray(" ", arr2);
+    printf("\n");
 
+    // ------------------------------------------------------------------------
+    char buf[4];
+    printf("readToBuffer %d of arr2: ", arr2.readToBuffer(buf, 4));
+    for (i = 0; i < 4; i++)
+        printf("%d ", buf[i]);
+    showArray(" from arr2, left:", arr2);
     printf("\n");
 
     /**************************************************************************

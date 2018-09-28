@@ -41,8 +41,18 @@ T & SimpleArray<T, SZ>::operator [](SZ index) {
 }
 
 template <class T, class SZ>
-T * SimpleArray<T, SZ>::bufferPointer(void) {
+T * SimpleArray<T, SZ>::getBuffer(void) {
     return buffer;
+}
+
+template <class T, class SZ>
+SZ SimpleArray<T, SZ>::readToBuffer(void * buf, SZ size) {
+    SZ i;
+    for (i = 0; i < bufferLength && i < size; i++) {
+        ((T *)buf)[i] = buffer[i];
+    }
+    remove(0, i);
+    return i;
 }
 
 /**
