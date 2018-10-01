@@ -1,15 +1,34 @@
-
-#include "SimpleArray.h"
-
 #include <stdio.h>
 #include <iostream>
 using namespace std;
 
-#define HEAP_SIZE 100
-#define TEST_SIZE 20
-#define TEST_COUNT 1000
+#include <UnitTest++/UnitTest++.h>
+/**
+ * To use UnitTest++ in Eclipse:
+ * https://stackoverflow.com/questions/9815131/eclipse-cdt-convert-a-normal-folder-to-a-source-folder-or-vice-versa
+ * https://stackoverflow.com/questions/2424795/building-multiple-binaries-within-one-eclipse-project
+ *
+ * In Eclipse project's properties setting:
+ *
+ * [C/C++ Build] | [Settings]
+ *
+ *     GCC C++ Compiler
+ *         Includes
+ *             Include paths (-l) >> "${workspace_loc:/simple-array/unittest-cpp}"
+ *
+ *     GCC C++ Linker
+ *         Libraries
+ *             Libraries (-l) >> "unittest++"
+ *             Library search path (-L) >> "${workspace_loc:/simple-array/unittest-cpp}"
+ *
+ */
 
+#include "SimpleArray.h"
 typedef SimpleArray<uint8_t, int> array_t;
+
+#define HEAP_SIZE  100
+#define TEST_SIZE  20
+#define TEST_COUNT 1000
 
 void showArray(const char * pre_msg, array_t & array) {
     printf("%s", pre_msg);
@@ -88,5 +107,5 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    return 0;
+    return UnitTest::RunAllTests();
 }
