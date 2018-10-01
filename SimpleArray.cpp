@@ -94,11 +94,22 @@ SZ SimpleArray<T, SZ>::append(T item) {
 
 template <class T, class SZ>
 SZ SimpleArray<T, SZ>::append(SimpleArray<T, SZ> & array) {
-    SZ cnt = 0;
-    for (SZ i = 0; i < array.length() && i < bufferSize; i++) {
-        cnt += append(array[i]);  // TODO: break after full.
+    SZ i;
+    for (i = 0; i < array.length() && i < bufferSize; i++) {
+        if (append(array[i]) < 1)
+            break;
     }
-    return cnt;
+    return i;
+}
+
+template <class T, class SZ>
+SZ SimpleArray<T, SZ>::append(void * buf, SZ count) {
+    SZ i;
+    for (i = 0; i < count && i < bufferSize; i++) {
+        if (append(((T *)buf)[i]) < 1)
+            break;
+    }
+    return i;
 }
 
 template <class T, class SZ>

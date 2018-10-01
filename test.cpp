@@ -57,8 +57,15 @@ int main(int argc, char * argv[]) {
     printf("readToBuffer %d of arr2: ", arr2.getBytes(buf, 4));
     for (i = 0; i < 4; i++)
         printf("%d ", buf[i]);
-    showArray(" from arr2, left:", arr2);
+    showArray(" from arr2, left: ", arr2);
     printf("\n");
+
+    // ------------------------------------------------------------------------
+    uint8_t ibuf[] = { 5, 5, 5, 5 };
+    arr2.append(ibuf, sizeof(ibuf));
+    showArray("append from buf to arr2, so arr2: ", arr2);
+    printf("\n");
+
 
     /**************************************************************************
      * Test reliability

@@ -32,7 +32,7 @@ class SimpleArray {
     T & operator [] (SZ index);
     T * getBuffer(void);
 
-    SZ getBytes(void * buf, SZ size);
+    SZ getBytes(void * buf, SZ size);  // 'size' is the maximum size of 'buf'.
 
     int  compare(SimpleArray<T, SZ> & array);
     bool operator == (SimpleArray<T, SZ> & array);
@@ -40,6 +40,7 @@ class SimpleArray {
 
     SZ append(T item);
     SZ append(SimpleArray<T, SZ> & array);
+    SZ append(void * buf, SZ count);
     void operator += (T item);
     void operator += (SimpleArray<T, SZ> & array);
     void operator = (T item);
