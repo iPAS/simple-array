@@ -1,92 +1,105 @@
 
+#include <UnitTest++.h>
+/**
+ * To use UnitTest++ in Eclipse:
+ * https://stackoverflow.com/questions/9815131/eclipse-cdt-convert-a-normal-folder-to-a-source-folder-or-vice-versa
+ * https://stackoverflow.com/questions/2424795/building-multiple-binaries-within-one-eclipse-project
+ *
+ * In Eclipse project's properties setting:
+ *
+ * [C/C++ Build] | [Settings]
+ *
+ *     GCC C++ Compiler
+ *         Includes
+ *             Include paths (-l) >> "${workspace_loc:/simple-array/unittest-cpp/UnitTest++}"
+ *
+ *     GCC C++ Linker
+ *         Libraries
+ *             Libraries (-l)           >> "UnitTest++"
+ *             Library search path (-L) >> "${workspace_loc:/simple-array/unittest-cpp/UnitTest++/.libs}"
+ *             Miscellaneous
+ *                 Linker flags         >> -static
+ *
+ * @link: https://github.com/unittest-cpp/unittest-cpp/wiki/Macro-and-Parameter-Reference
+ */
+
 #include "SimpleArray.h"
-
-#include <stdio.h>
-#include <iostream>
-using namespace std;
-
-#define HEAP_SIZE 100
-#define TEST_SIZE 20
-#define TEST_COUNT 1000
-
 typedef SimpleArray<uint8_t, int> array_t;
 
-void showArray(const char * pre_msg, array_t & array) {
-    printf("%s", pre_msg);
-    for (int i = 0; i < array.length(); i++)
-        printf("%d ", array[i]);
-    printf("\n");
+#define HEAP_SIZE  100
+#define TEST_SIZE  20
+#define TEST_COUNT 1000
+
+/**
+ * Test with Setup and Teardown
+ */
+class MyFixture {
+  public:
+    array_t arr1 = array_t(HEAP_SIZE);
+    array_t arr2 = array_t(HEAP_SIZE);
+
+    MyFixture() {
+        for (int i = 0; i < TEST_SIZE; i++)
+            arr1 += i;
+        arr2 += arr1;
+
+        //CHECK_ARRAY_EQUAL(arr1, arr2, TEST_SIZE);
+        for (int i = 0; i < TEST_SIZE; i++)
+            CHECK_EQUAL(arr1[i], arr2[i]);
+    }
+    ~MyFixture() {
+    }
+};
+
+TEST_FIXTURE(MyFixture, ArrayEqual) {
+    CHECK(arr1 == arr2);
 }
 
-int main(int argc, char * argv[]) {
-    printf("Test SimpleArray\n");
-    printf("----------------\n");
+TEST_FIXTURE(MyFixture, ArrayNotEqual) {
+    array_t arr(HEAP_SIZE);
+    arr = arr2;
+    arr.remove(8, TEST_SIZE);
+    CHECK(arr1 != arr);
+}
 
-    /**************************************************************************
-     * Test functions
-     */
-    int i;
+TEST_FIXTURE(MyFixture, ItemAssignment) {
+    array_t arr(HEAP_SIZE);
+    uint8_t a[TEST_SIZE];
+    for (int i = 0; i < TEST_SIZE; i++)
+        arr += a[i] = i;
+    for (int i = 0; i < TEST_SIZE; i++)
+        CHECK(arr[i] == a[i]);
+}
 
-    array_t arr1(HEAP_SIZE);
-    array_t arr2(HEAP_SIZE);
-    for (i = 0; i < TEST_SIZE; i++) {
-        arr1 += i;
-    }
-    arr2 += arr1;
+TEST_FIXTURE(MyFixture, Reliability) {
+    array_t arr(HEAP_SIZE);
+    arr = arr2;
+    #if (HEAP_SIZE != 100) || (TEST_SIZE != 20) || (TEST_COUNT != 1000)
+    #error "This test was prepared for the specific HEAP_SIZE, TEST_SIZE, and TEST_COUNT."
+    #endif
+    uint8_t ground_truth[] = {0, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 2, 3, 4, 5, 6};
 
-    // ------------------------------------------------------------------------
-    if (arr1 == arr2)
-        printf("Operator == , arr1 equal arr2\n");
-
-    printf("Remove arr2 from 2 to 2+%d = %d units:", TEST_SIZE, arr2.remove(8, TEST_SIZE));
-    showArray(" ", arr2);
-
-    if (arr1 != arr2)
-        printf("Operator != , arr1 not equal arr2\n");
-    printf("\n");
-
-    // ------------------------------------------------------------------------
-    printf("Lvalue accessing of arr2:");
-    for (i = 0; i < arr2.length(); i++)
-        arr2[i] = i;
-    showArray(" ", arr2);
-    printf("\n");
-
-    // ------------------------------------------------------------------------
-    char buf[4];
-    printf("readToBuffer %d of arr2: ", arr2.getBytes(buf, 4));
-    for (i = 0; i < 4; i++)
-        printf("%d ", buf[i]);
-    showArray(" from arr2, left: ", arr2);
-    printf("\n");
-
-    // ------------------------------------------------------------------------
-    uint8_t ibuf[] = { 5, 5, 5, 5 };
-    arr2.append(ibuf, sizeof(ibuf));
-    showArray("append from buf to arr2, so arr2: ", arr2);
-    printf("\n");
-
-
-    /**************************************************************************
-     * Test reliability
-     */
     for (int t = 0; t < TEST_COUNT; t++) {
-        uint8_t tmp = arr1[1];
-        arr1.remove(1, 10);
-        for (int j = tmp; j < tmp+10; j++) {
-            if (j < TEST_SIZE)
-                arr1 += j;
-            else
-                arr1 += j - TEST_SIZE + 1;
-        }
+        uint8_t tmp = arr[1];
+        arr.remove(1, 10);
 
-        if (t % 100 == 0) {
-            printf("arr1 after %d tests.. ", t);
-            for (i = 0; i < TEST_SIZE; i++)
-                printf("%d ", arr1[i]);
-            printf("\n");
+        for (int j = tmp; j < tmp + 10; j++) {
+            arr += (j < TEST_SIZE) ? j : j - TEST_SIZE + 1;
         }
     }
+    for (int i = 0; i < TEST_SIZE; i++) {
+        CHECK(arr[i] == ground_truth[i]);
+    }
+}
 
-    return 0;
+//TEST(Sanity) {
+//    CHECK_EQUAL(1, 1);
+//}
+
+/**
+ * Main
+ */
+int main(int argc, char * argv[]) {
+
+    return UnitTest::RunAllTests();
 }

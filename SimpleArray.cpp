@@ -36,7 +36,7 @@ SZ SimpleArray<T, SZ>::size() {
 }
 
 template <class T, class SZ>
-T & SimpleArray<T, SZ>::operator [](SZ index) {
+T & SimpleArray<T, SZ>::operator [] (SZ index) {
     return buffer[index];
 }
 
@@ -71,12 +71,12 @@ int SimpleArray<T, SZ>::compare(SimpleArray<T, SZ> & array) {
 }
 
 template <class T, class SZ>
-bool SimpleArray<T, SZ>::operator ==(SimpleArray<T, SZ> & array) {
+bool SimpleArray<T, SZ>::operator == (SimpleArray<T, SZ> & array) {
     return ((bufferLength == array.length()) && (compare(array) == 0));
 }
 
 template <class T, class SZ>
-bool SimpleArray<T, SZ>::operator !=(SimpleArray<T, SZ> & array) {
+bool SimpleArray<T, SZ>::operator != (SimpleArray<T, SZ> & array) {
     return !(*this == array);
 }
 
