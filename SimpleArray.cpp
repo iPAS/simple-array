@@ -1,7 +1,8 @@
-/*
+/**
  * Simple.cpp
  *
  *  Created on: Sep 27, 2018
+ *       Email: ipas.th@gmail.com
  *      Author: ipas
  */
 
