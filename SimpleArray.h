@@ -18,8 +18,8 @@ template <class T, class SZ>
 class SimpleArray {
 
   private:
-    SZ bufferLength;
-    SZ bufferSize;
+    SZ dataLength;  // Length of data kept.
+    SZ bufferSize;  // Maximum size of the 'buffer'.
     T * buffer;
 
   public:
@@ -27,7 +27,7 @@ class SimpleArray {
     ~SimpleArray();
 
     SZ length(void);
-    SZ size(void);
+    SZ capacity(void);
 
     T & operator [] (SZ index);
     T * getBuffer(void);
@@ -43,10 +43,15 @@ class SimpleArray {
     SZ append(void * buf, SZ count);
     void operator += (T item);
     void operator += (SimpleArray<T, SZ> & array);
-    void operator = (T item);
-    void operator = (SimpleArray<T, SZ> & array);
+    void operator  = (T item);
+    void operator  = (SimpleArray<T, SZ> & array);
+
+    SZ insert(SZ index, T item);
+    SZ insert(SZ index, SimpleArray<T, SZ> & array);
+    SZ insert(SZ index, void * buf, SZ count);
 
     SZ remove(SZ index, SZ count);
+    SZ trim(SZ index);
     void clear();
 };
 

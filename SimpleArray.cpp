@@ -13,7 +13,7 @@
  */
 template <class T, class SZ>
 SimpleArray<T, SZ>::SimpleArray(SZ initSize) {
-    bufferLength = 0;
+    dataLength = 0;
     bufferSize   = initSize;
     buffer       = new T[bufferSize];
 }
@@ -28,11 +28,11 @@ SimpleArray<T, SZ>::~SimpleArray() {
  */
 template <class T, class SZ>
 SZ SimpleArray<T, SZ>::length(void) {
-    return bufferLength;
+    return dataLength;
 }
 
 template <class T, class SZ>
-SZ SimpleArray<T, SZ>::size() {
+SZ SimpleArray<T, SZ>::capacity() {
     return bufferSize;
 }
 
@@ -49,7 +49,7 @@ T * SimpleArray<T, SZ>::getBuffer(void) {
 template <class T, class SZ>
 SZ SimpleArray<T, SZ>::getBytes(void * buf, SZ size) {
     SZ i;
-    for (i = 0; i < bufferLength && i < size; i++) {
+    for (i = 0; i < dataLength && i < size; i++) {
         ((T *)buf)[i] = buffer[i];
     }
     return i;  // actual read bytes
@@ -61,19 +61,19 @@ SZ SimpleArray<T, SZ>::getBytes(void * buf, SZ size) {
 template <class T, class SZ>
 int SimpleArray<T, SZ>::compare(SimpleArray<T, SZ> & array) {
     SZ i;
-    for (i = 0; i < bufferLength && i < array.length(); i++) {
+    for (i = 0; i < dataLength && i < array.length(); i++) {
         if (buffer[i] != array[i])
             break;
     }
-    if (bufferLength >= array.length())
-        return bufferLength - i;  // How many items left, NOT be compared nor equal
+    if (dataLength >= array.length())
+        return dataLength - i;  // How many items left, NOT be compared nor equal
     else
         return array.length() - i;
 }
 
 template <class T, class SZ>
 bool SimpleArray<T, SZ>::operator == (SimpleArray<T, SZ> & array) {
-    return ((bufferLength == array.length()) && (compare(array) == 0));
+    return ((dataLength == array.length()) && (compare(array) == 0));
 }
 
 template <class T, class SZ>
@@ -86,29 +86,19 @@ bool SimpleArray<T, SZ>::operator != (SimpleArray<T, SZ> & array) {
  */
 template <class T, class SZ>
 SZ SimpleArray<T, SZ>::append(T item) {
-    if (bufferLength < bufferSize) {
-        buffer[bufferLength++] = item;
-        return 1;
-    }
-    return 0;
+    return append(&item, 1);
 }
 
 template <class T, class SZ>
 SZ SimpleArray<T, SZ>::append(SimpleArray<T, SZ> & array) {
-    SZ i;
-    for (i = 0; i < array.length() && i < bufferSize; i++) {
-        if (append(array[i]) < 1)
-            break;
-    }
-    return i;
+    return append(array.getBuffer(), array.length());
 }
 
 template <class T, class SZ>
 SZ SimpleArray<T, SZ>::append(void * buf, SZ count) {
     SZ i;
-    for (i = 0; i < count && i < bufferSize; i++) {
-        if (append(((T *)buf)[i]) < 1)
-            break;
+    for (i = 0; i < count && dataLength < bufferSize; i++) {
+        buffer[dataLength++] = ((T *)buf)[i];
     }
     return i;
 }
@@ -136,27 +126,72 @@ void SimpleArray<T, SZ>::operator = (SimpleArray<T, SZ> & array) {
 }
 
 template <class T, class SZ>
-SZ SimpleArray<T, SZ>::remove(SZ index, SZ count) {
-    if (index >= bufferLength)
+SZ SimpleArray<T, SZ>::insert(SZ index, T item) {
+    return insert(index, &item, 1);
+}
+
+template <class T, class SZ>
+SZ SimpleArray<T, SZ>::insert(SZ index, SimpleArray<T, SZ> & array) {
+    return insert(index, array.getBuffer(), array.length());
+}
+
+template <class T, class SZ>
+SZ SimpleArray<T, SZ>::insert(SZ index, void * buf, SZ count) {
+    SZ i, j;
+
+    if (count > bufferSize - dataLength)
+        count = bufferSize - dataLength;
+    if (count == 0)
         return 0;
-    if (index+count >= bufferLength)
-        count = bufferLength - index;
+
+    // Right alignment
+    i = dataLength - 1;
+    j = dataLength + count - 1;
+    if (i < index)
+        return 0;
+    while (i >= index) {
+        buffer[j--] = buffer[i--];
+    }
+
+    // Insert
+    i = 0;
+    j = index;
+    while (i < count) {
+        buffer[j++] = ((T *)buf)[i++];
+    }
+    dataLength += count;
+
+    return count;
+}
+
+template <class T, class SZ>
+SZ SimpleArray<T, SZ>::remove(SZ index, SZ count) {
+    if (index >= dataLength)
+        return 0;
+    if (index+count >= dataLength)
+        count = dataLength - index;
 
     T * tmp = new T[bufferSize];
     SZ i, j = 0;
     for (i = 0; i < index; i++, j++) {
         tmp[j] = buffer[i];
     }
-    for (i = index+count; i < bufferLength; i++, j++) {
+    for (i = index+count; i < dataLength; i++, j++) {
         tmp[j] = buffer[i];
     }
     delete[] buffer;
     buffer = tmp;
-    bufferLength = j;
-    return count;
+    dataLength = j;
+    return count;  // Actual removed
+}
+
+template <class T, class SZ>
+SZ SimpleArray<T, SZ>::trim(SZ index) {
+    SZ count = dataLength - index;
+    return remove(index, count);
 }
 
 template <class T, class SZ>
 void SimpleArray<T, SZ>::clear() {
-    bufferLength = 0;
+    dataLength = 0;
 }

@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include <UnitTest++.h>
 /**
  * To use UnitTest++ in Eclipse:
@@ -74,9 +74,11 @@ TEST_FIXTURE(MyFixture, ItemAssignment) {
 TEST_FIXTURE(MyFixture, Reliability) {
     array_t arr(HEAP_SIZE);
     arr = arr2;
+
     #if (HEAP_SIZE != 100) || (TEST_SIZE != 20) || (TEST_COUNT != 1000)
     #error "This test was prepared for the specific HEAP_SIZE, TEST_SIZE, and TEST_COUNT."
     #endif
+
     uint8_t ground_truth[] = {0, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 2, 3, 4, 5, 6};
 
     for (int t = 0; t < TEST_COUNT; t++) {
@@ -87,8 +89,39 @@ TEST_FIXTURE(MyFixture, Reliability) {
             arr += (j < TEST_SIZE) ? j : j - TEST_SIZE + 1;
         }
     }
+
     for (int i = 0; i < TEST_SIZE; i++) {
         CHECK(arr[i] == ground_truth[i]);
+    }
+}
+
+TEST_FIXTURE(MyFixture, Insertion) {
+    array_t arr(HEAP_SIZE);
+    arr = arr2;
+
+    #if (HEAP_SIZE != 100) || (TEST_SIZE != 20) || (TEST_COUNT != 1000)
+    #error "This test was prepared for the specific HEAP_SIZE, TEST_SIZE, and TEST_COUNT."
+    #endif
+
+    uint8_t ground_truth_1[] = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+            99, 88, 77, 66, 55, 19};
+    uint8_t ground_truth_2[] = {
+            99, 88, 77, 66, 55,
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+            99, 88, 77, 66, 55, 19};
+    uint8_t inserted[] = {99, 88, 77, 66, 55};
+
+    CHECK(arr.insert(TEST_SIZE-1, inserted, 5) == 5);
+    for (int i = 0; i < arr.length(); i++) {
+        //printf("%d, ", arr[i]);
+        CHECK(arr[i] == ground_truth_1[i]);
+    }
+
+    CHECK(arr.insert(0, inserted, 5) == 5);
+    for (int i = 0; i < arr.length(); i++) {
+        //printf("%d, ", arr[i]);
+        CHECK(arr[i] == ground_truth_2[i]);
     }
 }
 
